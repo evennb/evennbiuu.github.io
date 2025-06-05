@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            background-color: #000;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .header-icon {
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        /* Bottom navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            background-color: #000;
+            border-top: 1px solid #333;
+            z-index: 10;
+        }
+        
+        .nav-icon {
+            font-size: 22px;
+            cursor: pointer;
+        }
+        
+        .nav-icon.active {
+            color: #fff;
+        }
+        
+        /* Main content */
+        .main-content {
+            padding: 10px 0 60px 0;
+        }
+        
+        /* Stories */
+        .stories-container {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+        }
+        
+        .stories {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+            gap: 15px;
+        }
+        
+        .stories::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        .story {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .story-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            padding: 2px;
+            margin-bottom: 5px;
+        }
+        
+        .story-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .story-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .story-name {
+            font-size: 12px;
+            text-align: center;
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Add story */
+        .add-story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .add-story-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+        
+        .add-story-label {
+            font-size: 12px;
+        }
+        
+        /* Post */
+        .post {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+        }
+        
+        .post-profile {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            padding: 2px;
+            cursor: pointer;
+        }
+        
+        .post-profile-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .post-profile-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .post-user {
+            font-weight: bold;
+            flex: 1;
+            cursor: pointer;
+        }
+        
+        .verified-badge {
+            color: #0095f6;
+            margin-left: 5px;
+        }
+        
+        .post-more {
+            cursor: pointer;
+        }
+        
+        .post-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #999;
+        }
+        
+        .post-actions {
+            padding: 10px 15px;
+            display: flex;
+        }
+        
+        .post-action {
+            margin-right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .post-action.save {
+            margin-left: auto;
+            margin-right: 0;
+        }
+        
+        .post-likes {
+            padding: 0 15px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .post-caption {
+            padding: 0 15px;
+            margin-bottom: 5px;
+        }
+        
+        .post-comments {
+            padding: 0 15px;
+            color: #999;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        
+        .post-time {
+            padding: 0 15px;
+            color: #999;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .post-add-comment {
+            padding: 15px;
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            outline: none;
+        }
+        
+        .post-button {
+            color: #0095f6;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* Profile Page (hidden by default) */
+        .profile-page {
+            display: none;
+            padding: 10px 15px 60px 15px;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            padding: 3px;
+        }
+        
+        .profile-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+
+        
+        .profile-avatar-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-stats {
+            flex: 1;
+        }
+        
+        .profile-stat {
+            display: inline-block;
+            text-align: center;
+            width: 30%;
+        }
+        
+        .profile-stat-number {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .profile-stat-label {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .profile-info {
+            margin-bottom: 20px;
+        }
+        
+        .profile-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .profile-bio {
+            margin-bottom: 5px;
+        }
+        
+        .profile-website {
+            color: #0095f6;
+            margin-bottom: 10px;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-button {
+            flex: 1;
+            padding: 8px 0;
+            text-align: center;
+            background-color: #333;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .profile-button.primary {
+            background-color: #0095f6;
+        }
+        
+        .profile-highlights {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .profile-highlights::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .highlight {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .highlight-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .highlight-label {
+            font-size: 12px;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            border-top: 1px solid #333;
+            margin-bottom: 10px;
+        }
+        
+        .profile-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            cursor: pointer;
+        }
+        
+        .profile-tab.active {
+            border-top: 1px solid #fff;
+        }
+        
+        .profile-tab i {
+            font-size: 24px;
+        }
+        
+        .profile-posts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+        
+        .profile-post {
+            aspect-ratio: 1/1;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .profile-post img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .back-button {
+            font-size: 24px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        
+        .instagram-logo {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style type="text/css">
+<!--
+.logo1 {            font-size: 18px;
+            font-weight: bold;
+}
+-->
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo"><i class="fab fa-instagram instagram-logo"></i>Instagram Filosófico </div>
+        <div class="header-icons">
+            <i class="far fa-heart header-icon"></i>
+            <i class="far fa-paper-plane header-icon"></i>
+        </div>
+    </div>
+    
+    <!-- Main content (Feed) -->
+    <div class="main-content" id="feed-view">
+        <!-- Stories -->
+        <div class="stories-container">
+            <div class="stories">
+                <!-- Add story button -->
+                <div class="add-story">
+                    <div class="add-story-button">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="add-story-label">Tu perfil</div>
+                </div>
+                
+                <!-- Stories with names below -->
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="baruch.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuaPgxAJw5XbBCvhfT6oUmE7qJ1hMmMgzWbA&s" alt="Usuario 1"></a>
+                        </div>
+                    </div>
+                    <div class="story-name">Baruch</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                           <a href="david_hume.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Allan_Ramsay_-_David_Hume%2C_1711_-_1776._Historian_and_philosopher_-_Google_Art_Project.jpg" alt="Usuario 2"></a>
+                        </div>
+                    </div>
+                    <div class="story-name">David Hume</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="francis_bacon.html"><img src="https://upload.wikimedia.org/wikipedia/commons/1/11/Francis_Bacon%2C_Viscount_St_Alban_from_NPG_%282%29.jpg" alt="Usuario 3"></a>
+                        </div>
+                    </div>
+                    <div class="story-name">Francis Bacon</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="giovanni_picodela_mirandola.html"><img src="https://s1.elespanol.com/2020/08/26/actualidad/actualidad_515959712_158498123_1706x1747.jpg" alt="Usuario 4"></a>
+                        </div>
+                    </div>
+                    <div class="story-name">Giovanni Pico</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="immanuel_kant.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Immanuel_Kant_-_Gemaelde_1.jpg/250px-Immanuel_Kant_-_Gemaelde_1.jpg" alt="Usuario 5"></a>
+                        </div>
+                    </div>
+                    <div class="story-name">Immanuel Kant</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="karl_marx.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaPLyyqO7RwkBTqm9YwfzZWOByRt8bRaDklQ&s" alt="Usuario 6"></a>
+                        </div>
+                    </div>
+                    <div class="story-name">Karl Marx</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="martin_lutero.html"> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkt9UWlqxmnykUMfqZnNZ_O_yUh0Q84-ml5w&s" alt="Usuario 7"></a>
+                        </div>
+                    </div>
+                    <div class="story-name">Martin Lutero</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="rene_descartes.html"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Frans_Hals_-_Portret_van_Ren%C3%A9_Descartes.jpg/640px-Frans_Hals_-_Portret_van_Ren%C3%A9_Descartes.jpg" alt="Usuario 8"></a>
+                        </div>
+                    </div>
+                    <div class="story-name">René Descartes</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="sanagustin_ofc.html"><img src="https://www.aciprensa.com/santos/images/agustin.jpg" alt="Usuario 9"></a>
+                        </div>
+                    </div>
+                    <div class="story-name">San Agustín</div>
+                </div>
+                <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="tomas_moro.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/d/d2/Hans_Holbein%2C_the_Younger_-_Sir_Thomas_More_-_Google_Art_Project.jpg" alt="Usuario 5"></a>
+                        </div>
+						
+                    </div>
+                    <div class="story-name">Tomás Moro</div>
+                </div>
+				 <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="GIORDANNO.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Portrait_of_Giordano_Bruno_in_%22Opere%22_Wellcome_L0015152_%28cropped%29.jpg/960px-Portrait_of_Giordano_Bruno_in_%22Opere%22_Wellcome_L0015152_%28cropped%29.jpg" alt="Usuario 5"></a>
+                        </div>
+						
+                    </div>
+                    <div class="story-name">Giornado Bruno </div>
+                </div>
+				 <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="guillermo.html"> <img src="https://webs.ucm.es/BUCM/media/images/blogs/fotoblog13459.jpg" alt="Usuario 5"></a>
+                        </div>
+						
+                    </div>
+                    <div class="story-name">Guillermo de Ockham</div>
+                </div>
+				 <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="Jean.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Jean_Paul_Sartre_1965.jpg/1200px-Jean_Paul_Sartre_1965.jpg" alt="Usuario 5"></a>
+                        </div>
+						
+                    </div>
+                    <div class="story-name">Jean Buridan </div>
+                </div>
+				 <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="nicolas.html"> <img src="https://redhistoria.com/wp-content/uploads/2012/05/512px-Copernicus.jpg" alt="Usuario 5"></a>
+                        </div>
+						
+                    </div>
+                    <div class="story-name">Nicolas Copernico </div>
+                </div>
+				 <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="nicolas.maquiavelo.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Portrait_of_Niccol%C3%B2_Machiavelli_by_Santi_di_Tito.jpg" alt="Usuario 5"></a>
+                        </div>
+						
+                    </div>
+                    <div class="story-name">Nicolas maquiavelo </div>
+                </div>
+				 <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="NicolasdeCusa.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Nicholas_of_Cusa.jpg" alt="Usuario 5"></a>
+                        </div>
+						
+                    </div>
+                    <div class="story-name">Nicolas de Causa </div>
+                </div>
+				 <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="santo tomasdeaquino.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/St-thomas-aquinas.jpg/1200px-St-thomas-aquinas.jpg" alt="Usuario 5"></a>
+                        </div>
+						
+                    </div>
+                    <div class="story-name">Santo toma deaquino </div>
+                </div>
+				 <div class="story">
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            <a href="Tomassocampanella_ofc.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Portrait_of_Tommaso_Campanella_%28by_Francesco_Cozza%29.jpg/250px-Portrait_of_Tommaso_Campanella_%28by_Francesco_Cozza%29.jpg" alt="Usuario 5"></a>
+                        </div>
+						
+                    </div>
+                    <div class="story-name">Tomasso campanella </div>
+                </div>
+				 <div class="story"></div>
+            </div>
+        </div>
+        
+        <!-- Post -->
+        <div class="post">
+            <div class="post-header">
+                <div class="post-profile">
+                    <div class="post-profile-inner">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1UKX4GS_jfwXYZK6EVrweFBaMV3KFQBS-DA&s" alt="Dadsaysjokes">
+                    </div>
+                </div>
+                <div class="post-user">Tufilosofia_03<span class="verified-badge"><i class="fas fa-check-circle"></i></span></div>
+                <div class="post-more"><i class="fas fa-ellipsis-h"></i></div>
+            </div>
+            
+            <div class="post-image">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Sanzio_01_Plato_Aristotle.jpg/800px-Sanzio_01_Plato_Aristotle.jpg" alt="Foto de perfil">
+            </div>
+            
+            <div class="post-actions">
+                <div class="post-action"><i class="far fa-heart"></i></div>
+                <div class="post-action"><i class="far fa-comment"></i></div>
+                <div class="post-action"><i class="far fa-paper-plane"></i></div>
+                <div class="post-action save"><i class="far fa-bookmark"></i></div>
+            </div>
+            
+            <div class="post-likes">4.441 Me gusta</div>
+            <div class="post-caption"><strong>michilosfo</strong> La filosofía es el amor a la sabiduría y se centra en la reflexión profunda sobre cuestiones fundamentales de la existencia, el conocimiento, la moral, la belleza y la realidad. #filosofo #parati #aprender </div>
+            <div class="post-comments">Ver los 12 comentarios</div>
+            <div class="post-time">HACE 2 HORAS</div>
+            
+            <div class="post-add-comment">
+                <input type="text" class="comment-input" placeholder="Agrega un comentario...">
+                <div class="post-button">Publicar</div>
+            </div>
+        </div>
+        
+        <!-- Second Post -->
+        <div class="post">
+            <div class="post-header">
+                <div class="post-profile">
+                    <div class="post-profile-inner">
+                        <img src="https://pbs.twimg.com/profile_images/1228088957/gatofilosofo_400x400.jpg" alt="travelgram">
+                    </div>
+                </div>
+                <div class="post-user">Michilosofo<span class="verified-badge"><i class="fas fa-check-circle"></i></span></div>
+                <div class="post-more"><i class="fas fa-ellipsis-h"></i></div>
+            </div>
+            
+            <div class="post-image">
+                <img src="https://antitrabajo.com/wp-content/uploads/2021/09/Filosofia-Felina.-Los-gatos-y-el-sentido-de-la-vida-de-John-Gray.jpg" alt="Paisaje natural">
+            </div>
+            
+            <div class="post-actions">
+                <div class="post-action"><i class="far fa-heart"></i></div>
+                <div class="post-action"><i class="far fa-comment"></i></div>
+                <div class="post-action"><i class="far fa-paper-plane"></i></div>
+                <div class="post-action save"><i class="far fa-bookmark"></i></div>
+            </div>
+            
+            <div class="post-likes">8.921 Me gusta</div>
+            <div class="post-caption"><strong>Michilosfo</strong> Ya esta publicado mi propio libro  michifilosofo, lo pueden comprarlo en este link: WWW.elmichilibro.amazon.com </div>
+            <div class="post-comments">Ver los 342 comentarios</div>
+            <div class="post-time">HACE 5 HORAS</div>
+            
+            <div class="post-add-comment">
+                <input type="text" class="comment-input" placeholder="Agrega un comentario...">
+                <div class="post-button">Publicar</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Page (hidden by default) -->
+    <div class="profile-page" id="profile-view">
+        <div class="header">
+            <div class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="logo">travelgram</div>
+            <div class="header-icons">
+                <i class="fas fa-bars header-icon"></i>
+            </div>
+        </div>
+        
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <div class="profile-avatar-inner">
+                    <img src="https://randomuser.me/api/portraits/women/5.jpg" alt="travelgram">
+                </div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <div class="profile-stat-number">120</div>
+                    <div class="profile-stat-label">Publicaciones</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-number">4.2K</div>
+                    <div class="profile-stat-label">Seguidores</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-number">342</div>
+                    <div class="profile-stat-label">Seguidos</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-info">
+            <div class="profile-name">Travel Adventures</div>
+            <div class="profile-bio">Exploring the world one photo at a time ✈️🌍</div>
+            <div class="profile-website">www.travelgram.com</div>
+        </div>
+        
+        <div class="profile-actions">
+            <div class="profile-button">Editar</div>
+            <div class="profile-button">Compartir perfil</div>
+            <div class="profile-button primary">+</div>
+        </div>
+        
+        <div class="profile-highlights">
+            <div class="highlight">
+                <div class="highlight-circle">
+                    <i class="fas fa-umbrella-beach"></i>
+                </div>
+                <div class="highlight-label">Beaches</div>
+            </div>
+            <div class="highlight">
+                <div class="highlight-circle">
+                    <i class="fas fa-mountain"></i>
+                </div>
+                <div class="highlight-label">Mountains</div>
+            </div>
+            <div class="highlight">
+                <div class="highlight-circle">
+                    <i class="fas fa-city"></i>
+                </div>
+                <div class="highlight-label">Cities</div>
+            </div>
+            <div class="highlight">
+                <div class="highlight-circle">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="highlight-label">Food</div>
+            </div>
+        </div>
+        
+        <div class="profile-tabs">
+            <div class="profile-tab active">
+                <i class="fas fa-th"></i>
+            </div>
+            <div class="profile-tab">
+                <i class="fas fa-film"></i>
+            </div>
+            <div class="profile-tab">
+                <i class="fas fa-bookmark"></i>
+            </div>
+        </div>
+        
+        <div class="profile-posts">
+            <div class="profile-post">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Post 1">
+            </div>
+            <div class="profile-post">
+                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Post 2">
+            </div>
+            <div class="profile-post">
+                <img src="https://images.unsplash.com/photo-1506260408121-e353d10b87c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Post 3">
+            </div>
+            <div class="profile-post">
+                <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Post 4">
+            </div>
+            <div class="profile-post">
+                <img src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Post 5">
+            </div>
+            <div class="profile-post">
+                <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Post 6">
+            </div>
+            <div class="profile-post">
+                <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Post 7">
+            </div>
+            <div class="profile-post">
+                <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Post 8">
+            </div>
+            <div class="profile-post">
+                <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Post 9">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom navigation -->
+    <div class="bottom-nav">
+        <i class="fas fa-home nav-icon active"></i>
+        <i class="fas fa-search nav-icon"></i>
+        <i class="fas fa-plus-square nav-icon"></i>
+        <i class="fas fa-film nav-icon"></i>
+       <a href="estudiantecolon_.html"> <i class="fas fa-user nav-icon"></i></a>
+    </div>
+</body>
+</html>

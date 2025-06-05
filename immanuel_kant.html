@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>immanuel_kant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            touch-action: manipulation;
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            background-color: #000;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .header-icon {
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        /* Profile Page */
+        .profile-page {
+            padding: 10px 0 80px 0;
+            max-width: 100%;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 15px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            padding: 2px;
+        }
+        
+        .profile-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .profile-avatar-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-stats {
+            flex: 1;
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .profile-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .profile-stat-number {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .profile-stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 2px;
+        }
+        
+        .profile-info {
+            margin-bottom: 15px;
+            padding: 0 15px;
+        }
+        
+        .profile-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .profile-bio {
+            margin-bottom: 5px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .profile-website {
+            color: #0095f6;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+        
+        /* Botones de perfil estilo Instagram */
+        .profile-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            padding: 0 15px;
+        }
+        
+        .profile-button {
+            flex: 1;
+            padding: 8px 0;
+            text-align: center;
+            background-color: #333;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+
+        .profile-button.follow {
+            background-color: #0095f6;
+        }
+        
+        .profile-button.following {
+            background-color: #262626;
+            color: #fff;
+        }
+        
+        .profile-button.message {
+            background-color: #333;
+        }
+        
+        .profile-button.add {
+            width: 40px;
+            background-color: #333;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .profile-highlights {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding: 0 15px;
+        }
+        
+        .profile-highlights::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .highlight {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 70px;
+        }
+        
+        .highlight-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .highlight-label {
+            font-size: 12px;
+            color: #fff;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            border-top: 1px solid #333;
+            margin-bottom: 5px;
+        }
+        
+        .profile-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            cursor: pointer;
+        }
+        
+        .profile-tab.active {
+            border-top: 1px solid #fff;
+        }
+        
+        .profile-tab i {
+            font-size: 20px;
+        }
+        
+        .profile-posts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+        
+        .profile-post {
+            aspect-ratio: 1/1;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .profile-post img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .back-button {
+            font-size: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        /* Modal de comentarios - Versión móvil */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .modal-content {
+            width: 100%;
+            height: auto;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: #000;
+        }
+        
+        .modal-image {
+            width: 100%;
+            padding-top: 100%;
+            position: relative;
+            background-color: #000;
+        }
+        
+        .modal-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        /* NUEVO: Estilos para el pie de foto */
+        .post-caption {
+            padding: 0 15px 15px;
+            margin-top: -5px;
+        }
+        
+        .caption-text {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-top: 5px;
+        }
+        
+        /* Acciones de la publicación (like, comment, share) */
+        .post-actions {
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+        }
+        
+        .post-actions-left {
+            display: flex;
+            gap: 15px;
+        }
+
+        
+        .post-action {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .post-action.like.active {
+            color: #ed4956;
+        }
+        
+        .modal-comments {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            padding: 12px 15px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background-color: #000;
+            z-index: 1;
+        }
+        
+        .modal-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            padding: 2px;
+        }
+        
+        .modal-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .modal-avatar-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .modal-username {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .modal-close {
+            margin-left: auto;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .likes-count {
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .comments-section {
+            flex: 1;
+            padding: 12px 15px;
+        }
+        
+        .comment {
+            display: flex;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 12px;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .comment-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-username {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        
+        .comment-text {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .comment-actions {
+            display: flex;
+            margin-top: 6px;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .comment-like {
+            margin-right: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-like i {
+            font-size: 12px;
+            margin-right: 4px;
+        }
+        
+        .comment-like.active {
+            color: #ed4956;
+        }
+        
+        .comment-reply {
+            cursor: pointer;
+        }
+        
+        .comment-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 3px;
+        }
+        
+        .add-comment {
+            padding: 15px;
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            bottom: 0;
+            background-color: #000;
+        }
+        
+        .comment-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            outline: none;
+            font-size: 14px;
+            border-radius: 20px;
+            background-color: #262626;
+        }
+        
+        .post-comment {
+            color: #0095f6;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+
+        .comment-heart {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 16px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .comment-heart.active {
+            color: #ed4956;
+        }
+
+        .sent-comment {
+            display: flex;
+            margin-bottom: 12px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style type="text/css">
+        .Estilo1 {font-size: 14px; line-height: 1.4; margin-top: 5px; font-family: Arial; }
+    </style>
+</head>
+<body>
+    <!-- Profile Page -->
+    <div class="profile-page" id="profile-view">
+        <div class="header">
+            <div class="back-button">
+              <a href="Insta filosofico.html">  <i class="fas fa-arrow-left"></i></a>
+            </div>
+            <div class="logo">immanuel_kant</div>
+            <div class="header-icons">
+                <i class="fas fa-bars header-icon"></i>
+            </div>
+        </div>
+
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <div class="profile-avatar-inner">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Immanuel_Kant_-_Gemaelde_1.jpg/250px-Immanuel_Kant_-_Gemaelde_1.jpg" alt="David Hume">
+                </div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <div class="profile-stat-number">1</div>
+                    <div class="profile-stat-label">Publicaciones</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-number">1.9K</div>
+                    <div class="profile-stat-label">Seguidores</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-sta1-number">213</div>
+                    <div class="profile-stat-label">Seguidos</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-info">
+            <div class="profile-name">immanuel_kant</div>
+            <div class="profile-bio">
+              <p>Filósofo | Ilustrado | Crítico de la razón<br>
+              Autor de Crítica de la razón pura y Crítica de la razón práctica </p>
+              <p>“El cielo estrellado sobre mí y la ley moral en mí.”</p>
+          </div>
+            <div class="profile-website">www.ejemplo.com</div>
+        </div>
+        
+        <div class="profile-actions">
+            <div class="profile-button follow" id="followButton" onClick="toggleFollow()">Seguir</div>
+            <div class="profile-button message">Mensaje</div>
+            <div class="profile-button add">
+                <i class="fas fa-user-plus"></i>
+            </div>
+        </div>
+        
+        <div class="profile-highlights">
+            <div class="highlight">
+                <div class="highlight-circle">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="highlight-label">Obras</div>
+            </div>
+            <div class="highlight">
+                <div class="highlight-circle">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="highlight-label">Museos</div>
+            </div>
+            <div class="highlight">
+                <div class="highlight-circle">
+                    <i class="fas fa-quote-right"></i>
+                </div>
+                <div class="highlight-label">Citas</div>
+            </div>
+        </div>
+        
+        <div class="profile-tabs">
+            <div class="profile-tab active">
+                <i class="fas fa-th"></i>
+            </div>
+            <div class="profile-tab">
+                <i class="fas fa-film"></i>
+            </div>
+            <div class="profile-tab">
+                <i class="fas fa-bookmark"></i>
+            </div>
+        </div>
+        
+        <div class="profile-posts">
+            <div class="profile-post" onClick="openModal()">
+                <img src="https://m.media-amazon.com/images/I/81x3IHrDJTL._UF894,1000_QL80_.jpg" alt="David Hume">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de comentarios - Versión móvil -->
+    <div class="modal" id="commentModal">
+        <div class="modal-content">
+            <div class="modal-image">
+                <img src="https://m.media-amazon.com/images/I/81x3IHrDJTL._UF894,1000_QL80_.jpg" alt="David Hume">
+            </div>
+            
+            <div class="post-caption">
+                <div class="modal-username">immanuel_kant</div>
+                <div class="Estilo1">"“La ilustración es la salida del hombre de su auto culpable minoría de edad.”"
+</div>
+            </div>
+            
+            <div class="post-actions">
+                <div class="post-actions-left">
+                    <div class="post-action like" onClick="toggleLike(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
+                    <div class="post-action" onClick="focusComment()">
+                        <i class="far fa-comment"></i>
+                    </div>
+                    <div class="post-action">
+                        <i class="far fa-paper-plane"></i>
+                    </div>
+                </div>
+                <div class="post-action">
+                    <i class="far fa-bookmark"></i>
+                </div>
+            </div>
+            
+            <div class="likes-count">
+                1,690 me gusta
+            </div>
+            
+            <div class="modal-comments">
+                <div class="modal-header">
+                    <div class="modal-avatar">
+                        <div class="modal-avatar-inner">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Immanuel_Kant_-_Gemaelde_1.jpg/250px-Immanuel_Kant_-_Gemaelde_1.jpg" alt="David Hume">
+                        </div>
+                    </div>
+                    <div class="modal-username">immanuel_kant</div>
+                    <div class="modal-close" onClick="closeModal()">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                
+                <div class="comments-section" id="commentsContainer">
+                    <div class="comment">
+                        <div class="comment-avatar">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nietzsche187a.jpg/1200px-Nietzsche187a.jpg" alt="Usuario">
+                        </div>
+                        <div class="comment-content">
+                            <div class="comment-username">nietz_sche
+</div>
+                            <div class="comment-text">¡Moral universal y deber! Kant, tu ética ahoga la vida. El superhombre no necesita imperativos, sino voluntad de poder
+
+</div>
+                            <div class="comment-actions">
+                                <div class="comment-like" onClick="toggleCommentLike(this)">
+                                    <i class="far fa-heart"></i> 24
+                                </div>
+                                <div class="comment-reply">Responder</div>
+                            </div>
+                            <div class="comment-time">Hace 2 horas</div>
+                        </div>
+                        <div class="comment-heart" onClick="toggleCommentHeart(this)">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="comment">
+                        <div class="comment-avatar">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Arthur_Schopenhauer_by_J_Sch%C3%A4fer%2C_1859b.jpg" alt="Usuario">
+                        </div>
+                        <div class="comment-content">
+                            <div class="comment-username">arthur_schopenhauer</div>
+                            <div class="comment-text">Todo muy bonito con la razón práctica, Kant, pero el mundo está regido por la voluntad ciega. El deber sin compasión es puro formalismo.</div>
+                            <div class="comment-actions">
+                                <div class="comment-like" onClick="toggleCommentLike(this)">
+                                    <i class="far fa-heart"></i> 15
+                                </div>
+                                <div class="comment-reply">Responder</div>
+                            </div>
+                            <div class="comment-time">Hace 1 hora</div>
+                        </div>
+                        <div class="comment-heart" onClick="toggleCommentHeart(this)">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                   
+                            <i class=""></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="add-comment">
+                    <input type="text" class="comment-input" placeholder="Añade un comentario..." id="commentInput" inputmode="text">
+                    <div class="post-comment" onClick="postComment()">Publicar</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('commentModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            document.getElementById('commentModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.documentElement.style.overflow = 'auto';
+        }
+        
+        function toggleFollow() {
+            const followButton = document.getElementById('followButton');
+            if (followButton.textContent === 'Seguir') {
+                followButton.textContent = 'Siguiendo';
+                followButton.classList.remove('follow');
+                followButton.classList.add('following');
+            } else {
+                followButton.textContent = 'Seguir';
+                followButton.classList.remove('following');
+                followButton.classList.add('follow');
+            }
+        }
+        
+        function toggleLike(button) {
+            button.classList.toggle('active');
+            const icon = button.querySelector('i');
+            if (button.classList.contains('active')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                icon.style.color = '#ed4956';
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                icon.style.color = '';
+            }
+        }
+        
+        function toggleCommentLike(button) {
+            button.classList.toggle('active');
+            const icon = button.querySelector('i');
+            let count = parseInt(button.textContent.trim().split(' ')[1]) || 0;
+            
+            if (button.classList.contains('active')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                count++;
+                button.innerHTML = `<i class="fas fa-heart"></i> ${count}`;
+                button.style.color = '#ed4956';
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                count--;
+                button.innerHTML = `<i class="far fa-heart"></i> ${count}`;
+                button.style.color = '#999';
+            }
+        }
+        
+        function toggleCommentHeart(heart) {
+            heart.classList.toggle('active');
+            const icon = heart.querySelector('i');
+            if (heart.classList.contains('active')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                heart.style.color = '#ed4956';
+                
+                heart.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    heart.style.transform = 'scale(1)';
+                }, 200);
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                heart.style.color = '#999';
+            }
+        }
+        
+        function postComment() {
+            const commentInput = document.getElementById('commentInput');
+            const commentText = commentInput.value.trim();
+            
+            if (commentText) {
+                const commentsContainer = document.getElementById('commentsContainer');
+                
+                const newComment = document.createElement('div');
+                newComment.className = 'sent-comment';
+                newComment.innerHTML = `
+                    <div class="comment-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="comment-content">
+                        <div class="comment-username">tú</div>
+                        <div class="comment-text">${commentText}</div>
+                        <div class="comment-actions">
+                            <div class="comment-like" onclick="toggleCommentLike(this)">
+                                <i class="far fa-heart"></i> 0
+                            </div>
+                            <div class="comment-reply">Responder</div>
+                        </div>
+                        <div class="comment-time">Ahora mismo</div>
+                    </div>
+                    <div class="comment-heart" onclick="toggleCommentHeart(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
+                `;
+                
+                commentsContainer.appendChild(newComment);
+                commentInput.value = '';
+                newComment.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        function focusComment() {
+            document.getElementById('commentInput').focus();
+        }
+        
+        document.getElementById('commentInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                postComment();
+            }
+        });
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('commentModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
